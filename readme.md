@@ -1,4 +1,5 @@
-# Documentation for Xplore Autumn 2021 project
+# Quantization of difference between 3D protein structures
+In this project, we focus on quantitative representation of difference between a pair of protein structures. 
 
 
 ## Report 
@@ -21,3 +22,68 @@
 5. Future goals or tasks
 
 6. 
+
+
+### Prerequisites
+
+1. Mapping from isoforms(RNA) to proteins(Sequence) is a bijection.  
+
+2. Mapping from gene to isoform is one-to-many. 
+
+3. Any two pair of isoforms transcribed by the same genome will have overlaps among sequences of their proteins. 
+
+
+### What we need
+
+1. A data directory of gene -> proteins -> .fasta and .pdb files
+
+
+### Algorithm for technique 1
+
+1. Given sequencing of two proteins (say P<sub>1</sub> and P<sub>2</sub>) which have originated from a single genome, say G.
+
+2. For each protein, say P<sup>(1)</sup>, we have a sequence of amino acids a<sup>(1)</sup><sub>1</sub>, a<sup>(1)</sup><sub>2</sub>, .... a<sup>(1)</sup><sub>n</sub> where n is the length of the protein.
+
+3. We predict structures of the proteins using alphafold2 such that P<sup>(1)</sup><sub>i</sub> are the co-ordinates of a<sup>(1)</sup><sub>i</sub>. 
+
+4. Let us say that proteins P<sup>(1)</sup> and P<sup>(2)</sup> correspond to isoforms I<sup>(1)</sup> and I<sup>(2)</sup>. (Note that : I<sup>(1)</sup> and I<sup>(2)</sup> must be transcribed by the source genome G). 
+
+5. We find the exons shared by I<sup>(1)</sup> and I<sup>(2)</sup>. Then by using the lengths of the exons i.e. number of amino acids in each exon, we find overlapping runs between P<sup>(1)</sup> and P<sup>(2)</sup>. 
+
+6. Thus, we get k overlaps L<sub>1</sub>, L<sub>2</sub>, .... L<sub>k</sub> where each lap L<sub>i</sub> stores starting and ending indices of the overlaps in each protein. I.e. L<sub>i</sub> is represented as tuple of size 4 (i<sub>1</sub>, i<sub>2</sub>, j<sub>1</sub>, j<sub>2</sub>) such that i<sub>2</sub> - i<sub>1</sub> == j<sub>2</sub> - i<sub>1</sub> and a<sup>(1)</sup><sub>i<sub>1</sub> + x </sub> == a<sup>(2)</sup><sub>j<sub>1</sub> + x </sub> for x = 0, 1, ... j<sub>2</sub> - j<sub>1</sub>. 
+
+8. Given an overlapping run for a protein, say a<sup>(1)</sup><sub>i<sub>1</sub></sub> to a<sup>(1)</sup><sub>i<sub>2</sub></sub>, we find distance between each pair of the amino acids to form a symmetric matrix D<sup>(1)</sup><sub>1</sub> such that D<sup>(1)</sup><sub>1</sub>[i][j] = ||a<sup>(1)</sup><sub>i</sub> - a<sup>(1)</sup><sub>j</sub>|| for i, j in {i<sub>1</sub>, .... i<sub>2</sub>}. 
+
+9. Given all such matrices, say D<sup>(1)</sup><sub>1</sub>, D<sup>(1)</sup><sub>2</sub>, ...... D<sup>(1)</sup><sub>m</sub> for P<sub>1</sub> and D<sup>(2)</sup><sub>1</sub>, D<sup>(2)</sup><sub>2</sub>, ...... D<sup>(2)</sup><sub>m</sub> for P<sub>2</sub>, we find sum of norms of differences i.e. ||D<sup>(1)</sup><sub>i</sub> - D<sup>(2)</sup><sub>i</sub>||<sub>F</sub>. 
+
+
+## Ideas for future 
+1. what does it mean to have a different structure ?
+
+2. if two proteins have similar structure, how different structures should they have?
+
+3. can we label proteins to be used in supervised learning -> domains ?
+
+4. If p1 and p2 are similar in structure, will they have same function?
+
+5. mutations in the genome are harmful
+
+6. hypothesis testing
+
+7. significance doesn't imply biological significance
+
+8. size effect -> how large n is 
+
+9. what is in the alphafold error file 
+
+10. sherlock 
+
+11. .gtf files -> code
+
+12. permutation testing / bootstrap
+
+13. paper that compare protein structures or functions
+
+14. procrustes
+
+# 
