@@ -99,15 +99,13 @@ class Base_model:
 
 
     def get_distances(self):
-        distance1 = 0
-        distance2 = 0
+        distance = 0
         matrices = []
         for s, e in self.overlaps:
             p1 = self.get_positions_for_overlap(self.res1, self.map1[s], self.map1[e])
             p2 = self.get_positions_for_overlap(self.res2, self.map2[s], self.map2[e])
             D1 = self.get_dist_mat(p1)
             D2 = self.get_dist_mat(p2)
-            distance1 += np.linalg.norm(D1 - D2)
-            distance2 += abs(np.linalg.norm(D1) - np.linalg.norm(D2)) 
+            distance += np.linalg.norm(D1 - D2)
             matrices += (D1, D2),
-        return matrices, self.round(distance1), self.round(distance2)
+        return matrices, self.round(distance)
