@@ -70,7 +70,7 @@ In this project, we focus on quantitative representation of difference between a
 
 6. hypothesis testing
 
-7. significance doesn't imply biological significance
+7. statistical significance doesn't imply biological significance
 
 8. size effect -> how large n is 
 
@@ -85,5 +85,3 @@ In this project, we focus on quantitative representation of difference between a
 13. paper that compare protein structures or functions
 
 14. procrustes
-
-# 
