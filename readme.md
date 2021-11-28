@@ -58,7 +58,7 @@ In this project, we focus on quantitative representation of difference between a
 
 
 ## Ideas for future 
-1. what does it mean to have a different structure ?
+1. what does it mean to have a different structure -> map structure to function.
 
 2. if two proteins have similar structure, how different structures should they have?
 

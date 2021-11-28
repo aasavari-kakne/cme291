@@ -1,5 +1,4 @@
 import numpy as np
-from protein import *
 from alignment import *
 
 class Base_model:
@@ -9,6 +8,7 @@ class Base_model:
 
 
         attributes :
+        ------------
 
             protein1 : Protein to store sequence and structure of first protein
 
@@ -32,6 +32,7 @@ class Base_model:
 
 
         methods :
+        ---------
 
             get_correct_alignment : return number of correctly aligned residue 
                                     pairs
@@ -55,10 +56,10 @@ class Base_model:
                             Also, returns distance values for defined metrics.
 
     """
-    def __init__(self, protein1_path, protein2_path):
+    def __init__(self, protein1, protein2):
         # read proteins
-        self.protein1 = Protein(protein1_path) 
-        self.protein2 = Protein(protein2_path)
+        self.protein1 = protein1
+        self.protein2 = protein2
         # read their structures
         self.res1 = self.protein1.get_residues()
         self.res2 = self.protein2.get_residues()
@@ -69,14 +70,11 @@ class Base_model:
         # get mapping from indices of alignment to indices of original sequence
         self.map1, self.map2 = self.alignment.get_index_maps()
 
-
     def get_correct_alignment(self):
         return self.alignment.get_score()
 
-
     def get_incorrect_alignment(self):
         return max(len(self.protein1), len(self.protein2)) - self.alignment.get_score()
-
 
     def get_positions_for_overlap(self, residues, start, end):
         positions = []
@@ -87,25 +85,29 @@ class Base_model:
         positions = np.stack(positions, axis=0) if positions else None
         return positions
 
-
     def round(self, num):
         return float(np.round(num, 2))
     
-
     def get_dist_mat(self, p):
         z = p[:, np.newaxis, :] - p[np.newaxis, :]
         D = np.linalg.norm(z, axis=2)
         return D
 
-
-    def get_distances(self):
-        distance = 0
+    def get_matrices(self):
         matrices = []
         for s, e in self.overlaps:
             p1 = self.get_positions_for_overlap(self.res1, self.map1[s], self.map1[e])
             p2 = self.get_positions_for_overlap(self.res2, self.map2[s], self.map2[e])
-            D1 = self.get_dist_mat(p1)
-            D2 = self.get_dist_mat(p2)
-            distance += np.linalg.norm(D1 - D2)
-            matrices += (D1, D2),
-        return matrices, self.round(distance)
+            if p1.shape == p2.shape:
+                matrices += (p1, p2),
+        return matrices
+
+    def get_distances(self):
+        distance = 0
+        for p1, p2 in self.get_matrices():
+                D1 = self.get_dist_mat(p1)
+                D2 = self.get_dist_mat(p2)
+                d = np.linalg.norm(D1 - D2) / p1.shape[0]
+                distance += d
+        return self.round(distance)
+
