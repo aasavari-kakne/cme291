@@ -50,7 +50,25 @@ class Protein:
 
 
 class Dataset:
+    """
+        reads and stores proteins from corresponding gene folders
 
+        attributes :
+
+            root : str to store path to the root of the data directory
+
+            parser : Bio.PDB.PDBParser to read the 3D structures of proteins
+            
+            data : OrderDict to store proteins saggregated by their parent gene
+            
+            proteins: list of all proteins in the data directory
+
+        methods :
+
+            load_data : for each gene folder, reads and stores proteins inside it
+
+            get_proteins : returns a list of all proteins inside the data direcory
+    """
     def __init__(self, root):
         self.root = root
         self.parser = PDBParser(PERMISSIVE = True, QUIET = True)
